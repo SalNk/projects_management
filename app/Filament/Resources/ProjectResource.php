@@ -11,13 +11,15 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProjectResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ProjectResource\RelationManagers;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use App\Filament\Resources\ProjectResource\RelationManagers;
 
 class ProjectResource extends Resource
 {
@@ -93,6 +95,7 @@ class ProjectResource extends Resource
                                 'todo' => 'A faire',
                                 'in_progress' => 'En cours',
                                 'done' => 'Terminé',
+                                'cancelled' => 'Annulé',
                             ])
                             ->default('todo'),
                         Textarea::make('note')
@@ -106,7 +109,29 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                //
+                ImageColumn::make('logo'),
+                TextColumn::make('type'),
+                TextColumn::make('name')
+                    ->label('Titre'),
+                TextColumn::make('status')
+                    ->label('Statut')
+                    ->formatStateUsing(function ($state) {
+                        $translations = [
+                            'todo' => 'A faire',
+                            'in_progress' => 'En cours',
+                            'done' => 'Terminé',
+                            'cancelled' => 'Annulé',
+                        ];
+                        return $translations[$state] ?? $state;
+                    })
+                    ->badge()
+                    ->color(fn(string $state) => match ($state) {
+                        'todo' => 'info',
+                        'in_progress' => 'primary',
+                        'done' => 'success',
+                        'cancelled' => 'danger'
+                    }),
+                TextColumn::make('user.name'),
             ])
             ->filters([
                 //
