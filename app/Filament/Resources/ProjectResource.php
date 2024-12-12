@@ -55,7 +55,7 @@ class ProjectResource extends Resource
                             ->label('Titre')
                             ->placeholder('Titre du projet'),
                         Select::make('user_id')
-                            ->label('Développeur')
+                            ->label('Tâche attribuée à')
                             ->columnSpanFull()
                             ->relationship('user', 'name')
                     ]),
@@ -75,14 +75,16 @@ class ProjectResource extends Resource
                         FileUpload::make('file_path')
                             ->label('Fichier détaillant le projet')
                             ->downloadable(),
+                        FileUpload::make('template')
+                            ->downloadable(),
+
+
                         // SpatieMediaLibraryFileUpload::make('media')
                         //     ->collection('images')
                         //     ->multiple()
                         //     ->maxFiles(2)
                         //     ->hiddenLabel()
                         //     ->label('Images à inclure'),
-                        FileUpload::make('template')
-                            ->downloadable()
                     ]),
                 Section::make('')
                     ->schema([
@@ -91,7 +93,8 @@ class ProjectResource extends Resource
                                 'todo' => 'A faire',
                                 'in_progress' => 'En cours',
                                 'done' => 'Terminé',
-                            ]),
+                            ])
+                            ->default('todo'),
                         Textarea::make('note')
                             ->rows(10)
                             ->autosize(),
@@ -110,6 +113,7 @@ class ProjectResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -130,7 +134,7 @@ class ProjectResource extends Resource
         return [
             'index' => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
-            'view' => Pages\CreateProject::route('/{record}'),
+            'view' => Pages\ViewProject::route('/{record}'),
             'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
     }
