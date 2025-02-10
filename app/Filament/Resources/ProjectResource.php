@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ProjectResource\Widgets\ProjectOverview;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Project;
@@ -27,6 +28,7 @@ class ProjectResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-folder';
     protected static ?string $navigationGroup = 'Main';
     protected static ?string $navigationLabel = 'Projets';
+    protected static ?string $label = 'Projets';
     protected static ?string $navigationBadgeTooltip = 'Projets à faire';
 
     public static function getNavigationBadge(): ?string
@@ -91,6 +93,7 @@ class ProjectResource extends Resource
                 Section::make('')
                     ->schema([
                         Select::make('status')
+                            ->label('Statut')
                             ->options([
                                 'todo' => 'A faire',
                                 'in_progress' => 'En cours',
@@ -151,6 +154,13 @@ class ProjectResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ProjectOverview::class
         ];
     }
 

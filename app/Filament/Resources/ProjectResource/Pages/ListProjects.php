@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ProjectResource\Pages;
 
+use App\Filament\Resources\ProjectResource\Widgets\ProjectOverview;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
@@ -16,6 +17,14 @@ class ListProjects extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // ProjectOverview::class
         ];
     }
 
